@@ -61,7 +61,8 @@ if (WIN32)
     )
 elseif (APPLE)
     # macOS
-    find_library(_LIB_OBS "${LIB_OBS}.0.dylib" PATHS ${OBS_BIN_DIR} REQUIRED)
+    #find_library(_LIB_OBS "${LIB_OBS}.0.dylib" PATHS ${OBS_BIN_DIR} REQUIRED)
+    find_library(_LIB_OBS "${LIB_OBS}.0.dylib" PATHS "/Applications/OBS.app/Contents/Frameworks" REQUIRED)
     set(LIB_OBS "${_LIB_OBS}")
 elseif (UNIX)
     # Linux
@@ -88,10 +89,13 @@ target_link_directories(obs-multi-rtmp PRIVATE
     "${CMAKE_CURRENT_BINARY_DIR}"
     ${OBS_BIN_DIR}
 )
+
+find_library(_LIB_OBS_FRONTEND "libobs-frontend-api.dylib" PATHS "/Applications/OBS.app/Contents/Frameworks" REQUIRED)
+
 target_link_libraries(obs-multi-rtmp PRIVATE
     Qt5::Widgets
     ${LIB_OBS}
-    obs-frontend-api
+    ${_LIB_OBS_FRONTEND}
 )
 
 if (WIN32)
